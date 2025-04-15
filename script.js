@@ -15,9 +15,13 @@ board.addEventListener('click', (e) => {
   const cell = e.target.closest('.cell');
   if (!cell || cell.querySelector('img') || !gameActive) return;
 
-  placeMark(cell, currentPlayer);
-  if (checkWin(currentPlayer)) {
-    setTimeout(() => alert(`${currentPlayer} wins!`), 10);
+  setTimeout(() => {
+  if (currentPlayer === 'X') {
+    alert('Ced wins! 🎉');
+  } else {
+    alert('Kaiser wins! 🎉');
+  }
+}, 10);
     gameActive = false;
     return;
   }
