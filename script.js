@@ -15,23 +15,30 @@ board.addEventListener('click', (e) => {
   const cell = e.target.closest('.cell');
   if (!cell || cell.querySelector('img') || !gameActive) return;
 
-  setTimeout(() => {
-  if (currentPlayer === 'X') {
-    alert('Ced wins! 🎉');
-  } else {
-    alert('Kaiser wins! 🎉');
-  }
-}, 10);
+  // Place the mark first
+  placeMark(cell, currentPlayer);
+
+  // Check for a win
+  if (checkWin(currentPlayer)) {
+    setTimeout(() => {
+      if (currentPlayer === 'X') {
+        alert('Ced wins! 🎉');
+      } else {
+        alert('Kaiser wins! 🎉');
+      }
+    }, 10);
     gameActive = false;
     return;
   }
 
+  // Check for draw
   if (isDraw()) {
     setTimeout(() => alert("It's a draw!"), 10);
     gameActive = false;
     return;
   }
 
+  // Switch player
   currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
 });
 
@@ -43,7 +50,7 @@ restartBtn.addEventListener('click', () => {
 
 function placeMark(cell, player) {
   const img = document.createElement('img');
-  img.src = `images/${player.toLowerCase()}.png`;
+  img.src = `images/${player.toLowerCase()}.png`; // Ensure correct path to the image
   img.alt = player;
   cell.appendChild(img);
 }
