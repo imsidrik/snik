@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Snake Game</title>
+  <style>
+    canvas {
+      background: #000;
+      display: block;
+      margin: 0 auto;
+      border: 2px solid #fff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="300" height="300"></canvas>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const box = 10;
+    const canvasSize = 300;
+    const totalBoxes = canvasSize / box;
+
+    let snake = [{ x: 50, y: 50 }, { x: 40, y: 50 }, { x: 30, y: 50 }];
+    let direction = "RIGHT";
+    let inGame = true;
+
+    let apple = {
+      x: Math.floor(Math.random() * totalBoxes) * box,
+      y: Math.floor(Math.random() * totalBoxes) * box
+    };
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+      else if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+      else if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+      else if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvasSize, canvasSize);
+
+     
+      ctx.fillStyle = "red";
+      ctx.fillRect(apple.x, apple.y, box, box);
+
+   
+      ctx.fillStyle = "lime";
+      for (let i = 0; i < snake.length; i++) {
+        ctx.fillRect(snake[i].x, snake[i].y, box, box);
+      }
+
+    
+      const head = { ...snake[0] };
+      if (direction === "LEFT") head.x -= box;
+      if (direction === "RIGHT") head.x += box;
+      if (direction === "UP") head.y -= box;
+      if (direction === "DOWN") head.y += box;
+
+
+      if (
+        head.x < 0 || head.x >= canvasSize ||
+        head.y < 0 || head.y >= canvasSize ||
+        snake.some((seg, i) => i > 3 && seg.x === head.x && seg.y === head.y)
+      ) {
+        inGame = false;
+        clearInterval(game);
+        ctx.fillStyle = "white";
+        ctx.font = "14px Helvetica";
+        ctx.fillText("Game Over", canvasSize / 2 - 35, canvasSize / 2);
+        return;
+      }
+
+      snake.unshift(head);
+
+
+      if (head.x === apple.x && head.y === apple.y) {
+        apple = {
+          x: Math.floor(Math.random() * totalBoxes) * box,
+          y: Math.floor(Math.random() * totalBoxes) * box
+        };
+      } else {
+        snake.pop();
+      }
+    }
+
+    const game = setInterval(draw, 140);
+  </script>
+</body>
+</html>
