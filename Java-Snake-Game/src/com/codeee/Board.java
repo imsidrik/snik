@@ -1,4 +1,4 @@
-package com.zetcode;
+package com.codeee;
 
 import java.awt.Color;
 import java.awt.Dimension;
